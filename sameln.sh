@@ -7,7 +7,6 @@ else
     if [ -d $1 ]
     then
         cd $1
-        echo 'These files are unreadable:- '
         for item in * .* # .* satisfies filename with "."
         do
             if [ -f "$item" ] # satisfies regular file constraint "" helps in filenames with space and asterisk
@@ -30,7 +29,8 @@ else
              echo "${allFilesArray[j]} has been hard linked to ${allFilesArray[0]}"
            done
         done
-       rm mdresult
+       #rm mdresult
+       #rm allFiles
     else
         echo "Directory does not exist"
     fi
