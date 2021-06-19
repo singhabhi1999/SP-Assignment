@@ -15,7 +15,7 @@ echo "d: Insert at begining of 5th Line";
 echo "e: exit";
 echo "Enter your choice : ";
 read choice;
-case $choice in
+case "$choice" in
 	"a")
 		if grep -q $1 $2
 		then
