@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [ $# != 2 ]
 then
 	echo "ERROR! Improper Argument List";
@@ -43,13 +45,15 @@ case $choice in
 		if [ $lines -lt 5 ] 
 		then 
 			echo "The file does not have a atleast 5 lines in it, cannot insert at 5th line !!";
-			exit 1;
+			echo " ";
+		else
+			echo "Content of the Original file is :";
+			cat $2;
+			sed -i "5s/^/$1 /" $2;
+			echo "Content of the file $2 after inserting '$1' at the 5th line :"
+			cat $2;
+			echo " ";
 		fi
-		echo "Content of the Original file is :";
-		cat $2;
-		sed -i "5s/^/$1 /" $2;
-		echo "Content of the file $2 after inserting '$1' at the 5th line :"
-		cat $2;
 	;;
 
 	"e")
