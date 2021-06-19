@@ -21,10 +21,11 @@ else
            cat mdresult | grep "${dup_hash_all[i]}" | sort | cut -d " " -f 3- | tee allFiles
            #cut -c 2- allFiles | tee allFiles
            mapfile allFilesArray < allFiles
+           allFilesArray[0]=$(echo "${allFilesArray[0]}" | tr -d '\n')
            for((j = 1; j < ${#allFilesArray[@]}; j++))
            do
              allFilesArray[j]=$(echo "${allFilesArray[j]}" | tr -d '\n')
-             #echo "${allFilesArray[j]}"
+             rm "${allFilesArray[j]}"
              ln "${allFilesArray[0]}" "${allFilesArray[j]}" 
              echo "${allFilesArray[j]} has been hard linked to ${allFilesArray[0]}"
            done
