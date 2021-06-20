@@ -4,6 +4,10 @@ if [ $# != 2 ]
 then
 	echo "ERROR! Improper Argument List";
 	exit 1;
+elif [ ! -f $2 ]
+then 
+	echo "File Does not exists,Please provide a valid input !! ";
+	exit 1;
 fi
 while true 
 do
@@ -26,26 +30,27 @@ case "$choice" in
 		echo "";;
 	"b")
 		echo "Content of the original file is : ";
-		cat $2;
+		cat ./$2;
 		sed -i "1s/^/$1 /" $2;
 		echo "Content of the file $2 after inserting '$1' at the begining : ";
-		cat $2;
+		cat ./$2;
 		echo " ";
 		;;
 	"c")
 		echo "Content of the original file is : ";
-		cat $2;
-		echo $1 >> $2;
+		cat ./$2;
+		echo $1 >> ./$2;
 		echo "Content of the file $2 after inserting '$1' at the end : ";
-		cat $2;
+		cat ./$2;
 		echo " ";
 		;;
 	"d")
 		lines=$(cat $2 | wc -l);
 		if [ $lines -lt 5 ] 
 		then 
-			echo "The file does not have a atleast 5 lines in it, cannot insert at 5th line !!";
+			echo "The file $2 does not have atleast 5 lines, hence cannot insert the string $1 at the 5th line !!";
 			echo " ";
+			continue;
 		else
 			echo "Content of the Original file is :";
 			cat $2;
