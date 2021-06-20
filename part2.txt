@@ -1,0 +1,37 @@
+script name:- sameln.sh
+
+Objective:-
+
+- Take directory name as command line parameter.
+- Find duplicate regular files in that directory.
+- Keep the file whose name is lexicographically first.
+- Replace other duplicates with hardlinks of the file found previously.
+
+Explaination of the script
+
+step 1:- Check the number of parameters if we dont have directory name as input throw an error.
+step 2:- Check if the entered parameter is directory or not with -d option in if statement.
+step 3:- Change directory into specified directory.
+step 4:- Run a loop through all the files present in the directory using * symbol and all hidden files with .* symbol
+step 5:- Check if the loop variable (file name) is regular file or not. "" around the variable helps in case filenames have space and other special characters like asterisk.
+step 6:- md5sum takes out hash value of the file using its contents and concatenates it to a file mdresult( contains 32 character hash and filename of each file).
+         In case a file is unreadable md5sum throws an error.
+step 7:- dup_hash_all=($(cat mdresult | sort | uniq -w32 -d | cut -b 1-32)) 
+         This command pipes the hash and filename list to sort command which sorts files according to hash and filename as uniq command needs sorted input,
+         then we find unique 32 characters(hash) -d option results in only duplicate values
+         then we cut the result to only contain first 32 charates(unique hash value)
+         then the () converts it into array.
+         Thus dup_hash_all contains array of unique hash values of duplicate files.
+step 8:- Running a loop till total number of elements in the dup_hash_all array.
+step 9:- cat mdresult | grep "${dup_hash_all[i]}" | sort | cut -d " " -f 3- > allFiles
+         Find all rows in mdresult with hash value same as value in dup_hash_all i.e unique hash of duplicate files,
+         then sort it and cut with delimiter " " and pick the third value(filename) and redirect those filenames to a temporary file allFiles.
+step 10:- mapfiles command takes the allFiles file which contain duplicate filenames and converts it to array.
+          Array index 0 contains filename which we want to keep intact rest of the filename we will remove and create hard links from the first file.
+step 11:- allFilesArray[0]=$(echo "${allFilesArray[0]}" | tr -d '\n')
+          Overwrite value of allFilesArray[0] with value after replacing unwanted charater(newline).
+step 12:- run a loop from index 1 (second position) to rest of the array.
+step 13:- Overwrite value of allFilesArray[j] with value after replacing unwanted charater(newline).
+step 14:- Remove all files with filename present in second to the last position.
+step 15:- Create hardlink of the deleted files which would have same filename as earlier from the filename present in first index.
+Step 16:- Remove all the exra files created. 
